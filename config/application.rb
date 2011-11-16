@@ -1,19 +1,13 @@
 require File.expand_path('../boot', __FILE__)
 
-# Pick the frameworks you want:
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
-require "active_resource/railtie"
-require "sprockets/railtie"
-# require "rails/test_unit/railtie"
+require 'rails/all'
 
-#if defined?(Bundler)
+if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  #Bundler.require *Rails.groups(:assets => %w(development test))
+  Bundler.require *Rails.groups(:assets => %w(development test))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
-#end
+end
 
 module SimpleApp
   class Application < Rails::Application
@@ -46,7 +40,7 @@ module SimpleApp
     config.filter_parameters += [:password]
 
     # Enable the asset pipeline
-    #config.assets.enabled = true
+    config.assets.enabled = true
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
