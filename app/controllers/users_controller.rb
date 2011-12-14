@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
-before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
-before_filter :correct_user, :only => [:edit, :update]
- before_filter :admin_user,   :only => :destroy
+	before_filter :authenticate, :only => [:index, :edit, :update, :destroy]
+	before_filter :correct_user, :only => [:edit, :update]
+  before_filter :admin_user,   :only => :destroy
 	
 	
 	def index
@@ -11,12 +11,17 @@ before_filter :correct_user, :only => [:edit, :update]
   
 	def show
     @user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(:page => params[:page])
     @title = @user.name
   end
   
   def new
+    if signed_in?
+  	redirect_to(root_path)
+  	else 
   	@user = User.new
   	@title = "Sign up"
+  	end
   end
   
   def create
@@ -31,6 +36,7 @@ before_filter :correct_user, :only => [:edit, :update]
       render 'new'
     end
   end
+  
   def edit
     #@user = User.find(params[:id])(see before_filter above & correct_user method below)
     @title = "Edit user"
@@ -55,10 +61,6 @@ before_filter :correct_user, :only => [:edit, :update]
   
   private
 
-    def authenticate
-      deny_access unless signed_in?
-    end
-    
     def correct_user
       @user = User.find(params[:id])
       redirect_to(root_path) unless current_user?(@user)
